@@ -10,6 +10,10 @@ class QuestionsController < ApplicationController
 
   end
 
+  def new
+    @question = Question.new
+  end
+
   private
 
   def set_question
