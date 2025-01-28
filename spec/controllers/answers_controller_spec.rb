@@ -7,14 +7,7 @@ RSpec.describe AnswersController, type: :controller do
   describe "POST answers#create" do
     context 'with valid attributes' do
       it 'creates and saves an answer to a question to the database' do
-        # count = Answer.count
-        puts Answer.count
-        # post :create, params: { answer: {body: '123'}, question_id: question.id }
-        # expect(Answer.count).to eq count + 1
         expect { post :create, params: { answer: attributes_for(:answer), question_id: question.id } }.to change(Answer, :count).by(1)
-        # puts question.inspect
-        # puts answer.inspect
-        puts Answer.count
       end
       it 'redirect to show view quetion' do
         post :create, params: { answer: attributes_for(:answer), question_id: question.id }
@@ -23,7 +16,13 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'with invalid attributes' do
-      
+      it 'does not save the answer' do
+        expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question.id } }.to_not change(Answer, :count)
+      end
+      it 'redirect to show view quetion' do
+        post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question.id }
+        expect(response).to redirect_to assigns(:question)
+      end
     end
   end
 end

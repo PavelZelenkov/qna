@@ -2,12 +2,13 @@ class AnswersController < ApplicationController
   
   before_action :find_question, only: %i[create]
   
-  def new
-  end
-
   def create
-    @answer = @question.answers.create(answer_params)
-    redirect_to @question
+    @answer = @question.answers.new(answer_params)
+    if @answer.save
+      redirect_to @question
+    else
+      redirect_to @question, notice: 'error creating answer to question'
+    end
   end
 
   private
