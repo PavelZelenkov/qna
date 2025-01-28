@@ -1,4 +1,4 @@
-class AnswerController < ApplicationController
+class AnswersController < ApplicationController
   
   before_action :find_question, only: %i[create]
   
@@ -7,6 +7,7 @@ class AnswerController < ApplicationController
 
   def create
     @answer = @question.answers.create(answer_params)
+    redirect_to @question
   end
 
   private
