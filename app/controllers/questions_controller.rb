@@ -18,6 +18,12 @@ class QuestionsController < ApplicationController
   end
 
   def create
+    pp '*' * 100
+    pp "PARAMS: #{params}"
+    pp '*' * 100
+    pp "ANSWER: #{@answer}"
+    pp '*' * 100
+    pp "QUESTION: #{@question}"
     @question = Question.new(question_params)
 
     if @question.save
