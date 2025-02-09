@@ -2,6 +2,7 @@ class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, except: %i[index show]
   before_action :load_question, only: %i[show edit update destroy]
+  before_action :the_set_answer, only: %i[show]
 
   def index
     @questions = Question.all
@@ -18,12 +19,6 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    pp '*' * 100
-    pp "PARAMS: #{params}"
-    pp '*' * 100
-    pp "ANSWER: #{@answer}"
-    pp '*' * 100
-    pp "QUESTION: #{@question}"
     @question = Question.new(question_params)
 
     if @question.save
@@ -54,5 +49,9 @@ class QuestionsController < ApplicationController
 
   def question_params
     params.require(:question).permit(:title, :body)
+  end
+
+  def the_set_answer
+    @answer = @question.answers.new
   end
 end

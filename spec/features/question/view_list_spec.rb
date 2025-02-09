@@ -24,5 +24,4 @@ feature 'The user can view the list of questions', %q{
     # save_and_open_page
     expect(page).to have_content 'MyString'
   end
-
 end
