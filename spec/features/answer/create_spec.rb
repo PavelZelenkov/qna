@@ -9,26 +9,27 @@ feature 'The user can write an answer to the question', %q{
   given!(:question) { create(:question) }
   # given!(:answer) { create(:answer, question_id: question.id)}
 
-  scenario 'An authenticated user answers a question' do
-    sign_in(user)
-
-    visit questions_path
-    click_on 'MyString' # перейти на страницу вопроса
-    fill_in 'Body', with: 'text body answer'
-    click_on 'Answer' # написать ответ на вопрос
-    expect(page).to have_content 'text body answer'
-    # save_and_open_page
-  end
-
-  scenario 'Authenticated user answers question with errors' do
-    sign_in(user)
-
-    visit questions_path
-    click_on 'MyString' # перейти на страницу вопроса
+  describe 'Authenticated user' do
     
-    click_on 'Answer' # написать ответ на вопрос
-    expect(page).to have_content 'error creating answer to question'
-    # save_and_open_page
+    background do
+      sign_in(user)
+
+      visit questions_path
+      click_on 'MyString' # перейти на страницу вопроса
+    end
+
+    scenario 'answers a question' do
+      fill_in 'Body', with: 'text body answer'
+      click_on 'Answer' # написать ответ на вопрос
+      expect(page).to have_content 'text body answer'
+      # save_and_open_page
+    end
+
+    scenario 'answers question with errors' do
+      click_on 'Answer' # написать ответ на вопрос
+      expect(page).to have_content 'error creating answer to question'
+      # save_and_open_page
+    end
   end
 
   scenario 'Unauthenticated user answers a question' do
