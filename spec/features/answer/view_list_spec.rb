@@ -7,7 +7,7 @@ feature 'The user can view a list of answers to the question', %q{
 
   given(:user) { create(:user) }
   given!(:question) { create(:question) }
-  given!(:answer) { create(:answer, question_id: question.id)}
+  given!(:answer) { create(:answer, question_id: question.id, author_id: user.id) }
 
   scenario 'An authenticated user views the question and answers to the question' do
     sign_in(user)

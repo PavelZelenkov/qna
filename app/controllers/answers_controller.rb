@@ -1,12 +1,16 @@
 class AnswersController < ApplicationController
   
   before_action :authenticate_user!
-  before_action :find_question, only: %i[create]
+  before_action :find_question, only: %i[create destroy]
+  before_action :find_author, only: %i[create destroy]
+  before_action :load_answer, only: %i[destroy]
   
   def create
-    @answer = @question.answers.new(answer_params)
-    # @answer = Answer.new(answer_params)
-    # @answer.question_id = @question.id
+    # @answer = @question.answers.new(answer_params)
+    @answer = Answer.new(answer_params)
+    # @answer = current_user.answers_created.new(answer_params)
+    @answer.question_id = @question.id
+    @answer.author_id = @author.id
     if @answer.save
       redirect_to @question
     else
@@ -14,10 +18,27 @@ class AnswersController < ApplicationController
     end
   end
 
+  def destroy
+    if @author == @answer.author
+      @answer.destroy
+      redirect_to @question, notice: 'Your answer has been successfully deleted'
+    else
+      redirect_to @question, notice: 'You cannot delete this answer because you are not its author'
+    end
+  end
+
   private
 
   def find_question
     @question = Question.find(params[:question_id])
+  end
+
+  def find_author
+    @author = current_user
+  end
+
+  def load_answer
+    @answer = Answer.find(params[:id])
   end
 
   def answer_params

@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let(:question) { create(:question) }
-  let(:answer) { create(:answer, question_id: question.id) }
   let(:user) { create(:user) }
+  let(:question) { create(:question) }
+  let(:answer) { create(:answer, question_id: question.id, author_id: user.id) }
   
   describe "POST #create" do
     before { login(user) }
@@ -26,6 +26,21 @@ RSpec.describe AnswersController, type: :controller do
         post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question.id }
         expect(response).to redirect_to assigns(:question)
       end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    before { login(user) }
+
+    let!(:answer) { create(:answer, question_id: question.id, author_id: user.id) }
+
+    it 'deletes the answer' do
+      expect { delete :destroy, params: { question_id: question.id, id: answer } }.to change(Answer, :count).by(-1)
+    end
+
+    it 'redirects to index' do
+      delete :destroy, params: { question_id: question.id, id: answer }
+      expect(response).to redirect_to assigns(:question)
     end
   end
 end

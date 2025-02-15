@@ -7,7 +7,7 @@ feature 'The user can write an answer to the question', %q{
 
   given(:user) { create(:user) }
   given!(:question) { create(:question) }
-  # given!(:answer) { create(:answer, question_id: question.id)}
+  # given!(:answer) { create(:answer, question_id: question.id, author_id: user.id) }
 
   describe 'Authenticated user' do
     
