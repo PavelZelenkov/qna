@@ -2,8 +2,7 @@ class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, except: %i[index show]
   before_action :load_question, only: %i[show edit update destroy]
-  before_action :the_set_answer, only: %i[show]
-  before_action :find_author, only: %i[create destroy]
+  before_action :set_answer, only: %i[show]
 
   def index
     @questions = Question.all
@@ -20,8 +19,7 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    @question = Question.new(question_params)
-    @question.author_id = @author.id
+    @question = current_user.questions_created.new(question_params)
 
     if @question.save
       redirect_to @question, notice: 'Your question soccessfully created.'
@@ -39,7 +37,7 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    if @question.author == @author
+    if current_user.id == @question.author_id
       @question.destroy
       redirect_to questions_path, notice: 'Your question has been successfully deleted'
     else
@@ -57,11 +55,7 @@ class QuestionsController < ApplicationController
     params.require(:question).permit(:title, :body)
   end
 
-  def the_set_answer
+  def set_answer
     @answer = @question.answers.new
-  end
-
-  def find_author
-    @author = current_user
   end
 end

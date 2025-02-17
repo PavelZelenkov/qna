@@ -2,12 +2,11 @@ class AnswersController < ApplicationController
   
   before_action :authenticate_user!
   before_action :find_question, only: %i[create destroy]
-  before_action :find_author, only: %i[create destroy]
   before_action :load_answer, only: %i[destroy]
   
   def create
-    @answer = @question.answers.new(answer_params)
-    @answer.author_id = @author.id
+    @answer = current_user.answers_created.new(answer_params)
+    @answer.question_id = @question.id
     
     if @answer.save
       redirect_to @question
@@ -17,7 +16,7 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    if @author == @answer.author
+    if current_user.id == @answer.author_id
       @answer.destroy
       redirect_to @question, notice: 'Your answer has been successfully deleted'
     else
@@ -29,10 +28,6 @@ class AnswersController < ApplicationController
 
   def find_question
     @question = Question.find(params[:question_id])
-  end
-
-  def find_author
-    @author = current_user
   end
 
   def load_answer
