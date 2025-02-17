@@ -3,6 +3,7 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
   before_action :load_question, only: %i[show edit update destroy]
   before_action :the_set_answer, only: %i[show]
+  before_action :find_author, only: %i[create destroy]
 
   def index
     @questions = Question.all
@@ -20,6 +21,7 @@ class QuestionsController < ApplicationController
 
   def create
     @question = Question.new(question_params)
+    @question.author_id = @author.id
 
     if @question.save
       redirect_to @question, notice: 'Your question soccessfully created.'
@@ -37,8 +39,12 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    @question.destroy
-    redirect_to questions_path
+    if @question.author == @author
+      @question.destroy
+      redirect_to questions_path, notice: 'Your question has been successfully deleted'
+    else
+      redirect_to @question, notice: 'You cannot delete a question you did not author'
+    end
   end
 
   private
@@ -53,5 +59,9 @@ class QuestionsController < ApplicationController
 
   def the_set_answer
     @answer = @question.answers.new
+  end
+
+  def find_author
+    @author = current_user
   end
 end

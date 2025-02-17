@@ -12,5 +12,6 @@ feature 'The user can log out of the system', %q{
 
     visit questions_path
     click_on 'logout'
+    expect(page).to have_content 'Signed out successfully'
   end
 end

@@ -6,11 +6,9 @@ class AnswersController < ApplicationController
   before_action :load_answer, only: %i[destroy]
   
   def create
-    # @answer = @question.answers.new(answer_params)
-    @answer = Answer.new(answer_params)
-    # @answer = current_user.answers_created.new(answer_params)
-    @answer.question_id = @question.id
+    @answer = @question.answers.new(answer_params)
     @answer.author_id = @author.id
+    
     if @answer.save
       redirect_to @question
     else

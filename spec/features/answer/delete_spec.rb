@@ -6,7 +6,7 @@ feature 'The author can delete his answer.', %q{
 } do
 
   given(:user) { create_list(:user, 2) }
-  given!(:question) { create(:question) }
+  given!(:question) { create(:question, author_id: user.first.id) }
   given!(:answer) { create(:answer, question_id: question.id, author_id: user.first.id) }
 
   scenario 'The author deletes his answer to the question' do

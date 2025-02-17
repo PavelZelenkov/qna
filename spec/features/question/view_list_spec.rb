@@ -7,10 +7,9 @@ feature 'The user can view the list of questions', %q{
 } do
 
   given(:user) { create(:user) }
-  given!(:question) { create(:question) }
+  given!(:question) { create(:question, author_id: user.id) }
 
   scenario 'Authenticated user views the list of questions' do
-    # question = Question.create!(title: 'MyString', body: 'text text text')
     sign_in(user)
 
     visit questions_path
@@ -18,10 +17,7 @@ feature 'The user can view the list of questions', %q{
   end
 
   scenario 'Unauthenticated user views the list of questions' do
-    # question = Question.create!(title: 'MyString', body: 'text text text')
-
     visit questions_path
-    # save_and_open_page
     expect(page).to have_content 'MyString'
   end
 end
