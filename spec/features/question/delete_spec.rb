@@ -23,8 +23,7 @@ feature 'The author can delete his question.', %q{
 
     visit questions_path
     click_on 'MyString'
-    click_on 'delete question'
 
-    expect(page).to have_content 'You cannot delete a question you did not author'
+    expect(page).to_not have_content 'delete question'
   end
 end
