@@ -12,12 +12,12 @@ RSpec.describe User, type: :model do
   it 'author verification - true' do
     answer = Answer.new(body: "AnswerBody", author_id: user.first.id)
 
-    expect(user.first.author_of?(answer)).to_not be_falsey
+    expect(user.first).to be_author_of(answer)
   end
 
   it 'author verification - false' do
     answer = Answer.new(body: "AnswerBody", author_id: user.last.id)
 
-    expect(user.first.author_of?(answer)).to be_falsey
+    expect(user.first).to_not be_author_of(answer)
   end
 end
