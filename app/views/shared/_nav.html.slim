@@ -1,0 +1,6 @@
+- if user_signed_in?
+  td= link_to 'logout', destroy_user_session_path, data: { turbo_method: :delete }
+- else
+  td= link_to 'log in', new_user_session_path
+  br
+  td= link_to 'sign up', new_user_registration_path

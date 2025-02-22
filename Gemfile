@@ -31,6 +31,7 @@ gem "tzinfo-data", platforms: %i[ mswin mswin64 mingw x64_mingw jruby ]
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 gem "slim-rails"
+gem "devise"
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
@@ -63,4 +64,5 @@ group :test do
   gem "selenium-webdriver"
   gem 'shoulda-matchers'
   gem "rails-controller-testing"
+  gem "launchy"
 end
