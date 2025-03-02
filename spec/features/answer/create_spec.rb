@@ -8,7 +8,7 @@ feature 'The user can write an answer to the question', %q{
   given(:user) { create(:user) }
   given!(:question) { create(:question, author_id: user.id) }
 
-  describe 'Authenticated user' do
+  describe 'Authenticated user', js: true do
     
     background do
       sign_in(user)
@@ -20,12 +20,16 @@ feature 'The user can write an answer to the question', %q{
     scenario 'answers a question' do
       fill_in 'Body', with: 'text body answer'
       click_on 'Answer'
-      expect(page).to have_content 'text body answer'
+
+      within '.answers' do
+        expect(page).to have_content 'text body answer'
+      end
     end
 
     scenario 'answers question with errors' do
       click_on 'Answer'
-      expect(page).to have_content 'error creating answer to question'
+      # save_and_open_page
+      expect(page).to have_content "Body can't be blank"
     end
   end
 

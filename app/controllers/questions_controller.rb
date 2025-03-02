@@ -56,6 +56,6 @@ class QuestionsController < ApplicationController
   end
 
   def set_answer
-    @answer = @question.answers.new
+    @answer = Answer.new
   end
 end
