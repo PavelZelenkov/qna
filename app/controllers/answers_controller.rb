@@ -7,12 +7,13 @@ class AnswersController < ApplicationController
   def create
     @answer = current_user.answers_created.new(answer_params)
     @answer.question_id = @question.id
-    
-    if @answer.save
-      redirect_to @question
-    # else
-    #   redirect_to @question, notice: 'error creating answer to question'
-    end
+    @answer.save
+    # if @answer.save
+    #   redirect_to @question
+      # else
+      #   redirect_to @question
+    # end
+
   end
 
   def destroy

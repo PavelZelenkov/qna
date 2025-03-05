@@ -12,6 +12,7 @@ feature 'The user can log out of the system', %q{
 
     visit questions_path
     click_on 'logout'
+    # save_and_open_page
     expect(page).to have_content 'Signed out successfully'
   end
 end
