@@ -1,4 +1,13 @@
--if Answer.exists?(answer.id)
-  p= answer.body
--if user_signed_in? && current_user.author_of?(answer)
-  p= link_to 'delete', answer_path(answer), data: { turbo_method: :delete }
+div id="answer-#{answer.id}"
+  -if Answer.exists?(answer.id)
+    p= answer.body
+  -if user_signed_in? && current_user.author_of?(answer)
+    p= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+
+    = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" }, local: false do |f|
+      = f.label :body, 'Your answer'
+      = f.text_area :body
+      = f.submit 'Save'
+
+    p= link_to 'Delete', answer_path(answer), class: 'delete-answer-link', data: { answer_id: answer.id, method: :delete }, local: false, remote: true
+    br
