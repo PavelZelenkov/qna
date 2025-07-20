@@ -1,4 +1,4 @@
-div id="answer-#{answer.id}"
+.answer id="answer-#{answer.id}"
   -if Answer.exists?(answer.id)
     p= answer.body
   -if user_signed_in? && current_user.author_of?(answer)
@@ -10,4 +10,6 @@ div id="answer-#{answer.id}"
       = f.submit 'Save'
 
     p= link_to 'Delete', answer_path(answer), class: 'delete-answer-link', data: { answer_id: answer.id, method: :delete }, local: false, remote: true
-    br
+  
+  -if user_signed_in? && current_user.author_of?(answer.question)
+    p= link_to answer.best? ? 'best answer' : 'choose the best answer', mark_as_best_answer_path(answer), class: 'mark-as-best', data: { method: :patch }, id: answer.id, local: false, remote: true

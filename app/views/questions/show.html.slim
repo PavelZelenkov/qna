@@ -1,10 +1,9 @@
-= render 'shared/errors', resource: @answer
-
-h1 = @question.title
-p= @question.body
+.questions
+  = render @question
 
 .answers
-  = render @question.answers
+  .answers-container
+    = render @question.answers.sorted
 
 br
 

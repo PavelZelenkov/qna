@@ -6,3 +6,4 @@ Rails.start();
 import "jquery";
 
 import "packs/utilities/answers"
+import "packs/utilities/questions"
