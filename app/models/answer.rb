@@ -9,7 +9,9 @@ class Answer < ApplicationRecord
   scope :sorted, -> { order(status: :desc, created_at: :asc) }
 
   def select_as_best
-    question.answers.update_all(status: :regular)
-    update(status: :best)
+    transaction do
+      question.answers.update_all(status: :regular)
+      update!(status: :best)
+    end
   end
 end

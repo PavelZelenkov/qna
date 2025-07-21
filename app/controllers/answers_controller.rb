@@ -22,6 +22,7 @@ class AnswersController < ApplicationController
 
   def mark_as_best
     @answer.select_as_best
+    @question = @answer.question
   end
 
   private
