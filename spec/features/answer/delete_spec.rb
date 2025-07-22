@@ -14,7 +14,7 @@ feature 'The author can delete his answer.', %q{
 
     visit questions_path
     click_on 'MyString'
-    click_on 'delete'
+    click_on 'Delete'
     expect(page).to have_content 'Your answer has been successfully deleted'
   end
 
@@ -23,6 +23,6 @@ feature 'The author can delete his answer.', %q{
     visit questions_path
     click_on 'MyString'
     
-    expect(page).to_not have_content 'delete'
+    expect(page).to_not have_content 'Delete'
   end
 end
