@@ -6,7 +6,9 @@
 
     = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" }, local: false do |f|
       = f.label :body, 'Your answer'
+      p
       = f.text_area :body
+      br
       = f.submit 'Save'
 
     p= link_to 'Delete', answer_path(answer), class: 'delete-answer-link', data: { answer_id: answer.id, method: :delete }, local: false, remote: true

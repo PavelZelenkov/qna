@@ -16,12 +16,15 @@ feature 'User can edit his question', %q{
   end
 
   describe 'Authenticated user' do
-    scenario 'edits his question', js: true do
+
+    background do
       sign_in(user.first)
       visit questions_path
       click_on 'MyString'
       click_on 'Edit question'
+    end
 
+    scenario 'edits his question', js: true do
       within'.questions' do
         fill_in 'Your question title', with: 'edited question title'
         fill_in 'Your question body', with: 'edited question body'
@@ -36,11 +39,6 @@ feature 'User can edit his question', %q{
     end
 
     scenario 'edits his question with errors', js: true do
-      sign_in(user.first)
-      visit questions_path
-      click_on 'MyString'
-      click_on 'Edit question'
-
       within'.questions' do
         fill_in 'Your question title', with: ''
         fill_in 'Your question body', with: ''
@@ -51,12 +49,22 @@ feature 'User can edit his question', %q{
       # save_and_open_page
     end
 
-    scenario "tries to edit other user's question" do
-      sign_in(user.last)
-      visit questions_path
-      click_on 'MyString'
-      expect(page).to_not have_link 'Edit'
+    scenario 'changes the question by attaching a file', js: true do
+      within'.questions' do
+        attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+        click_on 'Save'
+      end
+      expect(page).to have_link 'rails_helper.rb'
+      expect(page).to have_link 'spec_helper.rb'
       # save_and_open_page
     end
+  end
+
+  scenario "Authenticated user tries to edit other user's question" do
+    sign_in(user.last)
+    visit questions_path
+    click_on 'MyString'
+    expect(page).to_not have_link 'Edit'
+    # save_and_open_page
   end
 end

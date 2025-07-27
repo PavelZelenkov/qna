@@ -1,7 +1,7 @@
 class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, except: %i[index show]
-  before_action :load_question, only: %i[show edit update destroy]
+  before_action :load_question, only: %i[show edit update destroy delete_file]
   before_action :set_answer, only: %i[show]
 
   def index
@@ -29,7 +29,11 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    @question.update(question_params)
+    if @question.update(question_params.except(:files))
+      if params[:question][:files].present?
+        @question.files.attach(params[:question][:files])
+      end
+    end
   end
 
   def destroy
@@ -41,14 +45,22 @@ class QuestionsController < ApplicationController
     end
   end
 
+  def delete_file
+    if current_user.author_of?(@question)
+      file = @question.files.attachments.find(params[:file_id])
+      file.purge
+      @question.reload
+    end
+  end
+
   private
 
   def load_question
-    @question = Question.find(params[:id])
+    @question = Question.with_attached_files.find(params[:id])
   end
 
   def question_params
-    params.require(:question).permit(:title, :body)
+    params.require(:question).permit(:title, :body, files: [])
   end
 
   def set_answer
