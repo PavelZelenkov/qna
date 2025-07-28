@@ -6,7 +6,8 @@ Rails.application.routes.draw do
     end
     resources :answers, shallow: true, only: %i[create update destroy] do
       member do
-        patch 'mark_as_best'
+        patch :mark_as_best
+        delete :delete_file
       end
     end
   end

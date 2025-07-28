@@ -125,4 +125,50 @@ RSpec.describe AnswersController, type: :controller do
       expect(response).to render_template :mark_as_best
     end
   end
+
+  describe "PATCH /answers/:id" do
+    before { login(user) }
+
+    let(:file) { fixture_file_upload(Rails.root.join("spec/rails_helper.rb")) }
+
+    it 'adds a new file to the answer without deleting the old file' do
+      answer.files.attach(
+        io: File.open(Rails.root.join("spec/spec_helper.rb")),
+        filename: "spec_helper.rb"
+      )
+      expect(answer.files.count).to eq 1
+
+      patch :update, params: { id: answer, answer: { body: 'new body', files: [file] } }, format: :js
+      answer.reload
+
+      expect(answer.files.map(&:filename).map(&:to_s)).to include("rails_helper.rb", "spec_helper.rb")
+    end
+
+    it 'does not delete files if a new file is not added when editing a answer' do
+      answer.files.attach(file)
+      expect { patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js }.not_to change(ActiveStorage::Attachment, :count)
+    end
+  end
+
+  describe "DELETE /answers/:id/delete_file" do
+    before { login(user) }
+
+    let!(:file) do
+      answer.files.attach(
+        io: File.open(Rails.root.join("spec/spec_helper.rb")),
+        filename: "spec_helper.rb"
+      )
+      answer.files.last
+    end
+
+    it 'deletes file from answer' do
+      expect {  
+        delete :delete_file, params: { id: answer.id, file_id: file.id }, format: :js
+      }.to change(ActiveStorage::Attachment, :count).by(-1)
+
+      expect(response).to have_http_status(:ok)
+      expect { file.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      expect(Answer.exists?(answer.id)).to be true
+    end
+  end
 end

@@ -26,6 +26,18 @@ feature 'The user can write an answer to the question', %q{
       end
     end
 
+    scenario 'answers a question with an attached file' do
+      fill_in 'Body', with: 'text body answer'
+
+      attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+      click_on 'Answer'
+
+      within '.answers' do
+        expect(page).to have_link 'rails_helper.rb'
+        expect(page).to have_link 'spec_helper.rb'
+      end
+    end
+
     scenario 'answers question with errors' do
       click_on 'Answer'
       expect(page).to have_content "Body can't be blank"

@@ -2,7 +2,7 @@ class AnswersController < ApplicationController
   
   before_action :authenticate_user!
   before_action :find_question, only: %i[create]
-  before_action :load_answer, only: %i[update destroy mark_as_best]
+  before_action :load_answer, only: %i[update destroy mark_as_best delete_file]
   
   def create
     @answer = current_user.answers_created.new(answer_params)
@@ -11,7 +11,11 @@ class AnswersController < ApplicationController
   end
 
   def update
-    @answer.update(answer_params)
+    if @answer.update(answer_params.except(:files))
+      if params[:answer][:files].present?
+          @answer.files.attach(params[:answer][:files])
+      end
+    end
     @question = @answer.question
   end
 
@@ -25,6 +29,15 @@ class AnswersController < ApplicationController
     @question = @answer.question
   end
 
+  def delete_file
+    if current_user.author_of?(@answer)
+      file = @answer.files.attachments.find(params[:file_id])
+      file.purge
+      @answer.reload
+      @question = @answer.question
+    end
+  end
+
   private
 
   def find_question
@@ -32,10 +45,10 @@ class AnswersController < ApplicationController
   end
 
   def load_answer
-    @answer = Answer.find(params[:id])
+    @answer = Answer.with_attached_files.find(params[:id])
   end
 
   def answer_params
-    params.require(:answer).permit(:body)
+    params.require(:answer).permit(:body, files: [])
   end
 end
