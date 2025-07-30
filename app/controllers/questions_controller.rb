@@ -1,7 +1,7 @@
 class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, except: %i[index show]
-  before_action :load_question, only: %i[show edit update destroy delete_file]
+  before_action :load_question, only: %i[show edit update destroy]
   before_action :set_answer, only: %i[show]
 
   def index
@@ -42,14 +42,6 @@ class QuestionsController < ApplicationController
       redirect_to questions_path, notice: 'Your question has been successfully deleted'
     else
       redirect_to @question
-    end
-  end
-
-  def delete_file
-    if current_user.author_of?(@question)
-      file = @question.files.attachments.find(params[:file_id])
-      file.purge
-      @question.reload
     end
   end
 

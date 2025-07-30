@@ -188,26 +188,4 @@ RSpec.describe QuestionsController, type: :controller do
       expect { patch :update, params: { id: question, question: { title: 'new title', body: 'new body' } }, format: :js }.not_to change(ActiveStorage::Attachment, :count)
     end
   end
-
-  describe "DELETE /questions/:id/delete_file" do
-    before { login(user) }
-
-    let!(:file) do
-      question.files.attach(
-        io: File.open(Rails.root.join("spec/spec_helper.rb")),
-        filename: "spec_helper.rb"
-      )
-      question.files.last
-    end
-
-    it 'deletes file from question' do
-      expect {  
-        delete :delete_file, params: { id: question.id, file_id: file.id }, format: :js
-      }.to change(ActiveStorage::Attachment, :count).by(-1)
-
-      expect(response).to have_http_status(:ok)
-      expect { file.reload }.to raise_error(ActiveRecord::RecordNotFound)
-      expect(Question.exists?(question.id)).to be true
-    end
-  end
 end

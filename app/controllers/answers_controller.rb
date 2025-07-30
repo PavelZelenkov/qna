@@ -2,7 +2,7 @@ class AnswersController < ApplicationController
   
   before_action :authenticate_user!
   before_action :find_question, only: %i[create]
-  before_action :load_answer, only: %i[update destroy mark_as_best delete_file]
+  before_action :load_answer, only: %i[update destroy mark_as_best]
   
   def create
     @answer = current_user.answers_created.new(answer_params)
@@ -27,15 +27,6 @@ class AnswersController < ApplicationController
   def mark_as_best
     @answer.select_as_best
     @question = @answer.question
-  end
-
-  def delete_file
-    if current_user.author_of?(@answer)
-      file = @answer.files.attachments.find(params[:file_id])
-      file.purge
-      @answer.reload
-      @question = @answer.question
-    end
   end
 
   private

@@ -6,10 +6,11 @@ h1 = question.title
 p= question.body
 
 - if question.files.attached?
-  - question.files.each do |file|
-    p= link_to file.filename.to_s, url_for(file), target: "_blank"
-    -if user_signed_in? && current_user.author_of?(question)
-      p= link_to 'delete file', delete_file_question_path(question, file_id: file.id), method: :delete, class: 'btn btn-danger btn-sm', local: false, remote: true
+  - question.files.each do |attachment|
+    div id="file-#{attachment.id}"
+      p= link_to attachment.filename.to_s, url_for(attachment), target: "_blank"
+      -if user_signed_in? && current_user.author_of?(question)
+        p= link_to 'delete file', attachment_path(attachment), method: :delete, local: false, remote: true
 
 -if user_signed_in? && current_user.author_of?(question)
   = link_to 'Edit question', '#', class: 'edit-question-link', data: { question_id: question.id }
