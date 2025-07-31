@@ -164,4 +164,28 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
+
+  describe "PATCH /questions/:id" do
+    before { login(user) }
+
+    let(:file) { fixture_file_upload(Rails.root.join("spec/rails_helper.rb")) }
+
+    it 'adds a new file to the question without deleting the old file' do
+      question.files.attach(
+        io: File.open(Rails.root.join("spec/spec_helper.rb")),
+        filename: "spec_helper.rb"
+      )
+      expect(question.files.count).to eq 1
+
+      patch :update, params: { id: question, question: { title: 'new title', body: 'new body', files: [file] } }, format: :js
+      question.reload
+
+      expect(question.files.map(&:filename).map(&:to_s)).to include("rails_helper.rb", "spec_helper.rb")
+    end
+
+    it 'does not delete files if a new file is not added when editing a question' do
+      question.files.attach(file)
+      expect { patch :update, params: { id: question, question: { title: 'new title', body: 'new body' } }, format: :js }.not_to change(ActiveStorage::Attachment, :count)
+    end
+  end
 end

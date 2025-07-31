@@ -29,7 +29,11 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    @question.update(question_params)
+    if @question.update(question_params.except(:files))
+      if params[:question][:files].present?
+        @question.files.attach(params[:question][:files])
+      end
+    end
   end
 
   def destroy
@@ -44,11 +48,11 @@ class QuestionsController < ApplicationController
   private
 
   def load_question
-    @question = Question.find(params[:id])
+    @question = Question.with_attached_files.find(params[:id])
   end
 
   def question_params
-    params.require(:question).permit(:title, :body)
+    params.require(:question).permit(:title, :body, files: [])
   end
 
   def set_answer

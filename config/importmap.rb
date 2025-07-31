@@ -9,3 +9,5 @@ pin "jquery", to: "https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.js"
 pin_all_from "app/javascript/controllers", under: "controllers"
 pin "packs/utilities/answers"
 pin "packs/utilities/questions"
+pin "@rails/activestorage", to: "activestorage.esm.js"
+
