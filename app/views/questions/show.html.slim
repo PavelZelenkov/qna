@@ -1,6 +1,12 @@
 .questions
   = render @question
 
+.links
+  p Links:
+  ul
+    -@question.links.each do |link|
+      li= link_to link.name, link.url
+
 .answers
   .answers-container
     = render @question.answers.sorted
@@ -17,6 +23,12 @@ br
   = f.label :files
   br
   = f.file_field :files, multiple: true, direct_upload: true
+  p Links:
+  #links
+    = f.fields_for :links do |l|
+      = render 'shared/link_fields', f: l
+    .links
+      = link_to_add_association 'add link', f, :links, partial: 'shared/link_fields'
   p
   = f.submit 'Answer'
 br

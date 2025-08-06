@@ -10,4 +10,4 @@ pin_all_from "app/javascript/controllers", under: "controllers"
 pin "packs/utilities/answers"
 pin "packs/utilities/questions"
 pin "@rails/activestorage", to: "activestorage.esm.js"
-
+pin "@nathanvda/cocoon", to: "@nathanvda--cocoon.js" # @1.2.14
