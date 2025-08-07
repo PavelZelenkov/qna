@@ -5,5 +5,9 @@
   p
     = f.label :url
     = f.text_field :url
+    - if f.object.errors[:url].any?
+      ul.errors
+        - f.object.errors[:url].each do |msg|
+          li= msg
   = link_to_remove_association "delete", f
   

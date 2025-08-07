@@ -35,6 +35,36 @@ feature 'User can add links to answer', %q{
     click_on 'add link'
     expect(page).to have_selector("input[name*='[links_attributes]'][name*='[name]']", visible: true)
     expect(page).to have_selector("input[name*='[links_attributes]'][name*='[url]']", visible: true)
-    save_and_open_page
+  end
+
+  describe "Doesn't save answer" do
+    background do
+      sign_in(user)
+      visit questions_path
+      click_on 'MyString'
+    end
+    
+    scenario "with the missing URL" do
+      fill_in 'Link name', with: 'My gist'
+      click_on 'Answer'
+
+      expect(page).to have_content "Links url can't be blank"
+      expect(page).to have_content "Links url it is not valid URL"
+    end
+
+    scenario "with invalid url" do
+      fill_in 'Link name', with: 'My gist'
+      fill_in 'Url', with: 'https://gist'
+      click_on 'Answer'
+
+      expect(page).to have_content "Links url it is not valid URL"
+    end
+
+    scenario "with the missing name" do
+      fill_in 'Url', with: gist_url
+      click_on 'Answer'
+
+      expect(page).to have_content "Links name can't be blank"
+    end
   end
 end
