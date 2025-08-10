@@ -5,7 +5,11 @@
   p Links:
   ul
     -@question.links.each do |link|
-      li= link_to link.name, link.url
+      li
+        = link_to link.name, link.url, target: "_blank"
+        -if link.gist?
+          - height = 20 + 20 * gist_line_count(link.url)
+          iframe.gist-iframe src="#{link.url}.pibb" width="100%" height="#{height}" frameborder="0"
 
 .answers
   .answers-container

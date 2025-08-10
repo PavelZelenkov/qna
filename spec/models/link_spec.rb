@@ -29,11 +29,20 @@ RSpec.describe Link, type: :model do
       end
     end
 
-    context "with valid url" do
-      let(:url) { "https://gist.github.com" }
+    context "with valid url and true gist" do
+      let(:url) { "https://gist.github.com/PavelZelenkov/0f47e461a01fb077db0824e2f2429a97" }
 
       it "is valid" do
         expect(link).to be_valid
+        expect(link.gist?).to eq true
+      end
+    end
+
+    context "false gist" do
+      let(:url) { "https://google.com" }
+
+      it "is valid" do
+        expect(link.gist?).to eq false
       end
     end
   end

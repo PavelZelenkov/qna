@@ -5,6 +5,7 @@ import Rails from "@rails/ujs";
 Rails.start();
 import "jquery";
 
+import "packs/utilities/gist_render"
 import "packs/utilities/answers"
 import "packs/utilities/questions"
 

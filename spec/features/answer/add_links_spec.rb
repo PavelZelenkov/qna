@@ -24,6 +24,7 @@ feature 'User can add links to answer', %q{
 
     within '.answers' do
       expect(page).to have_link 'My gist', href: gist_url
+      expect(page).to have_css("iframe[src*='#{gist_url}.pibb']")
     end
   end
 

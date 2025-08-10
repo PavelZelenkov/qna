@@ -22,6 +22,7 @@ feature 'User can add links to question', %q{
     click_on 'Ask'
 
     expect(page).to have_link 'My gist', href: gist_url
+    expect(page).to have_css("iframe[src*='#{gist_url}.pibb']")
   end
 
   scenario 'User adds new link to question when using cocoon' do
