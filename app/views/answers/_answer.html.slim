@@ -3,14 +3,18 @@
     p= answer.body
 
     .links
-      p Links:
-      ul
-        -answer.links.each do |link|
-          li
-            = link_to link.name, link.url, target: "_blank"
-            -if link.gist?
-              - height = 20 + 20 * gist_line_count(link.url)
-              iframe.gist-iframe src="#{link.url}.pibb" width="100%" height="#{height}" frameborder="0"
+      - if answer.links.any?
+        p Links:
+        ul
+          -answer.links.each do |link|
+            li id="link-#{link.id}"
+              = link_to link.name, link.url, target: "_blank"
+              -if link.gist?
+                - height = 20 + 20 * gist_line_count(link.url)
+                iframe.gist-iframe src="#{link.url}.pibb" width="100%" height="#{height}" frameborder="0"
+              br
+              -if user_signed_in? && current_user.author_of?(answer)
+                = link_to "delete link", link_path(link), method: :delete, remote: true, class: "remove-link"
 
   - if answer.files.attached?
     - answer.files.each do |attachment|

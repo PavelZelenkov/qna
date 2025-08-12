@@ -1,0 +1,5 @@
+$("#link-<%= @link.id %>").remove();
+
+if ($(".links ul li").length === 0) {
+  $(".links p").remove();
+}
