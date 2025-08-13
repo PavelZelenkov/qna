@@ -41,5 +41,11 @@ p= question.body
     = f.label :files
     br
     = f.file_field :files,  multiple: true, direct_upload: true
+    p Links:
+    #links
+      = f.fields_for :links do |l|
+        = render 'shared/link_fields', f: l
+      .links
+        = link_to_add_association 'add link', f, :links, partial: 'shared/link_fields'
     p
     = f.submit 'Save'
