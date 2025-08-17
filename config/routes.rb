@@ -8,6 +8,10 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :users do
+    resources :awards, only: %i[index]
+  end
+
   resources :attachments, only: %i[destroy]
   resources :links, only: %i[destroy]
 

@@ -17,5 +17,14 @@
       = render 'shared/link_fields', f: l
     .links
       = link_to_add_association 'add link', f, :links, partial: 'shared/link_fields'
-  p    
+  p
+    = f.fields_for :award do |a|
+      = a.label :name, 'Name of the award'
+      = a.text_field :name
+      p
+      = a.label :image, 'Picture of the award'
+      = a.file_field :image
+  p
   = f.submit 'Ask'
+
+  p= link_to 'Back', questions_path

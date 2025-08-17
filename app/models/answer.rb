@@ -17,6 +17,9 @@ class Answer < ApplicationRecord
     transaction do
       question.answers.update_all(status: :regular)
       update!(status: :best)
+      if question.award.present?
+        question.award.update!(user: author)
+      end
     end
   end
 end
