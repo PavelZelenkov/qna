@@ -1,0 +1,15 @@
+h2 Accessmy awards
+
+- if @awards.any?
+  ui
+    - @awards.each do |award|
+      li
+        = link_to award.question.title, question_path(award.question) 
+        | - #{ award.name }
+        - if award.image.attached?
+          br
+          = image_tag award.image, width: 100, height: 70
+- else
+  p You have no awards.
+  
+p= link_to 'Back', questions_path

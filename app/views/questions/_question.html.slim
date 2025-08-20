@@ -5,6 +5,20 @@ h1 = question.title
 
 p= question.body
 
+.links
+  - if question.links.any?
+    p Links:
+    ul
+      -question.links.each do |link|
+        li id="link-#{link.id}"
+          = link_to link.name, link.url, target: "_blank"
+          -if link.gist?
+            - height = 20 + 20 * gist_line_count(link.url)
+            iframe.gist-iframe src="#{link.url}.pibb" width="100%" height="#{height}" frameborder="0"
+          br
+          -if user_signed_in? && current_user.author_of?(question)
+            = link_to "delete link", link_path(link), method: :delete, remote: true, class: "remove-link"
+
 - if question.files.attached?
   - question.files.each do |attachment|
     div id="file-#{attachment.id}"
@@ -27,5 +41,11 @@ p= question.body
     = f.label :files
     br
     = f.file_field :files,  multiple: true, direct_upload: true
+    p Links:
+    #links
+      = f.fields_for :links do |l|
+        = render 'shared/link_fields', f: l
+      .links
+        = link_to_add_association 'add link', f, :links, partial: 'shared/link_fields'
     p
     = f.submit 'Save'

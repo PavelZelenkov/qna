@@ -1,6 +1,14 @@
 .questions
   = render @question
 
+- if @question.award.present?
+  p Best Answer Reward:
+  p= @question.award.name
+  - if @question.award.image.attached?
+    = image_tag @question.award.image, width: 100, height: 70
+- else
+  p No reward for this question
+
 .answers
   .answers-container
     = render @question.answers.sorted
@@ -17,6 +25,12 @@ br
   = f.label :files
   br
   = f.file_field :files, multiple: true, direct_upload: true
+  p Links:
+  #links
+    = f.fields_for :links do |l|
+      = render 'shared/link_fields', f: l
+    .links
+      = link_to_add_association 'add link', f, :links, partial: 'shared/link_fields'
   p
   = f.submit 'Answer'
 br

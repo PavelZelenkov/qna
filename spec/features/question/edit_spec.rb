@@ -8,6 +8,7 @@ feature 'User can edit his question', %q{
 
   given(:user) { create_list(:user, 2) }
   given!(:question) { create(:question, author_id: user.first.id) }
+  given!(:link) { create(:link, linkable: question, name: "Link name", url: "https://gist.github.com") }
 
   scenario 'Unauthenticated can not edit question' do
     visit question_path(question)
@@ -56,6 +57,29 @@ feature 'User can edit his question', %q{
       end
       expect(page).to have_link 'rails_helper.rb'
       expect(page).to have_link 'spec_helper.rb'
+      # save_and_open_page
+    end
+
+    scenario 'changes the question by attaching a link', js: true do
+      within'.questions' do
+        click_on 'add link'
+        within all('.nested-fields').last do
+          fill_in 'Link name', with: 'My gist'
+          fill_in 'Url', with: 'https://gist.github.com/PavelZelenkov/0f47e461a01fb077db0824e2f2429a97'
+        end
+        click_on 'Save'
+      end
+      expect(page).to have_link('My gist', href: 'https://gist.github.com/PavelZelenkov/0f47e461a01fb077db0824e2f2429a97')
+      # save_and_open_page
+    end
+
+    scenario 'changes the question by editing the link', js: true do
+      within'.questions' do
+        fill_in 'Link name', with: 'My gist'
+        fill_in 'Url', with: 'https://gist.github.com/PavelZelenkov/0f47e461a01fb077db0824e2f2429a97'
+        click_on 'Save'
+      end
+      expect(page).to have_link('My gist', href: 'https://gist.github.com/PavelZelenkov/0f47e461a01fb077db0824e2f2429a97')
       # save_and_open_page
     end
   end
