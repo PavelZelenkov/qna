@@ -4,8 +4,7 @@ class Award < ApplicationRecord
 
   has_one_attached :image
 
-  validates :name, presence: true, if: :needs_award_validation?
-  validates :image, presence: true, if: :needs_award_validation?
+  validates :name, :image, presence: true, if: :needs_award_validation?
 
   private
 

@@ -4,8 +4,7 @@ class AwardsController < ApplicationController
   before_action :authorize_user!
 
   def index
-    @user = User.find(params[:user_id])
-    @awards = @user.awards.includes(:question)
+    @awards = current_user.awards.includes(:question)
   end
 
   private
