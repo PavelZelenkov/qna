@@ -7,7 +7,26 @@ class AnswersController < ApplicationController
   def create
     @answer = current_user.answers_created.new(answer_params)
     @answer.question_id = @question.id
-    @answer.save
+
+    respond_to do |format|
+      if @answer.save
+        if params[:answer][:files].present?
+          @answer.files.attach(params[:answer][:files])
+        end
+        format.json do
+          render json: {
+            answer: @answer,
+            html: render_to_string(
+              partial: 'answers/answer',
+              formats: [:html],
+              locals: { answer: @answer }
+            )
+          }
+        end
+      else
+        format.json { render json: @answer.errors.full_messages, status: :unprocessable_entity }
+      end
+    end
   end
 
   def update
