@@ -1,5 +1,6 @@
 class AnswersController < ApplicationController
-  
+  include Votable
+
   before_action :authenticate_user!
   before_action :find_question, only: %i[create]
   before_action :load_answer, only: %i[update destroy mark_as_best]

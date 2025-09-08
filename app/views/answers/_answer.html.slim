@@ -16,7 +16,7 @@
               -if user_signed_in? && current_user.author_of?(answer)
                 = link_to "delete link", link_path(link), method: :delete, remote: true, class: "remove-link"
 
-  - if answer.files.attached?
+  -if answer.files.attached?
     - answer.files.each do |attachment|
       div id="file-#{attachment.id}"
         p= link_to attachment.filename.to_s, url_for(attachment), target: "_blank"
@@ -47,3 +47,10 @@
   
   -if user_signed_in? && current_user.author_of?(answer.question)
     p= link_to answer.best? ? 'best answer' : 'choose the best answer', mark_as_best_answer_path(answer), class: 'mark-as-best', data: { method: :patch }, id: answer.id, local: false, remote: true
+
+  -if current_user && !current_user.author_of?(answer)
+    .div.answer-vote
+      = link_to 'Like', '#', data: { type: 'json', id: answer.id, type: 'answer', value: 1 }, class: 'vote-btn'
+      br
+      = link_to 'Dislike', '#', data: { type: 'json', id: answer.id, type: 'answer', value: -1 }, class: 'vote-btn'
+  p id="rating_answer_#{answer.id}"= answer.votes.sum(:value)

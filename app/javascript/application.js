@@ -8,6 +8,7 @@ import "jquery";
 import "packs/utilities/gist_render"
 import "packs/utilities/answers"
 import "packs/utilities/questions"
+import "packs/utilities/votes"
 
 import * as ActiveStorage from "@rails/activestorage"
 ActiveStorage.start()
