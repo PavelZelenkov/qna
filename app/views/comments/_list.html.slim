@@ -1,0 +1,7 @@
+- comments = local_assigns.fetch(:comments)
+- commentable = local_assigns.fetch(:commentable)
+- cid = "#{dom_id(commentable)}-comments"
+ul.comments id=cid
+  - comments.each do |comment|
+    = render "comments/comment", comment: comment
+    

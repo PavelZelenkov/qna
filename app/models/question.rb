@@ -2,6 +2,7 @@ class Question < ApplicationRecord
   has_many :answers, dependent: :destroy
   has_many :links, dependent: :destroy, as: :linkable, inverse_of: :linkable
   has_many :votes, as: :votable, dependent: :destroy
+  has_many :comments, as: :commentable, dependent: :destroy
   has_one :award, dependent: :destroy
   belongs_to :author, class_name: 'User', foreign_key: :author_id
 

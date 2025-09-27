@@ -14,7 +14,7 @@ feature 'User can add links to answer', %q{
     sign_in(user)
     visit questions_path
     click_on 'MyString'
-
+    # save_and_open_page
     fill_in 'Body', with: 'My answer'
 
     fill_in 'Link name', with: 'My gist'

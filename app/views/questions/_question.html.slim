@@ -56,3 +56,8 @@ p= question.body
     br
     = link_to 'Dislike', '#', data: { type: 'json', id: question.id, type: 'question', value: -1 }, class: 'vote-btn'
 p id="rating_question_#{question.id}" = question.votes.sum(:value)
+
+h3 Comments
+= render "comments/list", comments: question.comments.includes(:user).order(created_at: :asc), commentable: question
+-if user_signed_in?
+  = render "comments/form", commentable: question

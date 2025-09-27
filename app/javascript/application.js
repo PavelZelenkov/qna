@@ -8,7 +8,10 @@ import "jquery";
 import "packs/utilities/gist_render"
 import "packs/utilities/answers"
 import "packs/utilities/questions"
+import "packs/utilities/links"
 import "packs/utilities/votes"
+import { autoInitComments } from "packs/utilities/comments";
+document.addEventListener("turbo:load", () => { autoInitComments(); });
 
 import * as ActiveStorage from "@rails/activestorage"
 ActiveStorage.start()

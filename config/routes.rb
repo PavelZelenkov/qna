@@ -1,5 +1,12 @@
 Rails.application.routes.draw do
+  get "comments/index"
+  get "comments/create"
   devise_for :users
+
+  concern :commentable do
+    resources :comments, only: [:index, :create]
+  end
+
   resources :questions do
     member do
       post :vote
@@ -10,6 +17,11 @@ Rails.application.routes.draw do
         post :vote
       end
     end
+    concerns :commentable
+  end
+
+  resources :answers, only: [] do
+    concerns :commentable
   end
 
   resources :users do

@@ -10,6 +10,8 @@ pin_all_from "app/javascript/controllers", under: "controllers"
 pin "packs/utilities/gist_render"
 pin "packs/utilities/answers"
 pin "packs/utilities/questions"
+pin "packs/utilities/links"
 pin "packs/utilities/votes"
+pin "packs/utilities/comments"
 pin "@rails/activestorage", to: "activestorage.esm.js"
 pin "@nathanvda/cocoon", to: "@nathanvda--cocoon.js" # @1.2.14
