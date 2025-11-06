@@ -134,6 +134,11 @@ GEM
       warden (~> 1.2.3)
     diff-lcs (1.5.1)
     drb (2.2.1)
+    eco (1.0.0)
+      coffee-script
+      eco-source
+      execjs
+    eco-source (1.1.0.rc.1)
     error_highlight (0.7.0)
     erubi (1.13.1)
     execjs (2.10.0)
@@ -395,6 +400,7 @@ DEPENDENCIES
   cocoon
   debug
   devise
+  eco
   error_highlight (>= 0.4.0)
   factory_bot_rails
   gon

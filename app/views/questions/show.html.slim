@@ -15,6 +15,7 @@
 
 br
 
+h3 New Answer
 .answer-errors
   = render 'shared/errors', resource: @answer
 = form_with model: [@question, @answer], class: 'new-answer', data: { type: :json }, local: false do |f|

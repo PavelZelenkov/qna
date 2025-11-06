@@ -12,13 +12,36 @@ class CommentsController < ApplicationController
   def create
     @comment = @commentable.comments.build(comment_params.merge(user: current_user))
     if @comment.save
+      question_id = if @comment.commentable_type == "Question"
+        @comment.commentable_id
+      elsif @comment.commentable_type == "Answer"
+        @comment.commentable.question_id
+      end
+
+      ActionCable.server.broadcast(
+        "comments_for_question_#{question_id}",
+        {
+          comment: CommentBroadcastSerializer.new(@comment, view_context).as_json,
+          commentable_type: @comment.commentable_type,
+          commentable_id: @comment.commentable_id
+        }
+      )
+
       respond_to do |format|
-        format.json { render json: @comment.as_json(only: [:id, :body, :created_at]),
-                          status: :created }
+        format.json {
+          render json: @comment.as_json(
+            only: [:id, :body, :created_at],
+            include: { user: { only: [:id] } }
+          ), 
+          status: :created
+        }
       end
     else
       respond_to do |format|
-        format.json { render json: { errors: @comment.errors.full_messages }, status: :unprocessable_entity }
+        format.json {
+          render json: { errors: @comment.errors.full_messages }, 
+          status: :unprocessable_entity 
+        }
       end
     end
   end

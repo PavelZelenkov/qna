@@ -18,5 +18,3 @@ import * as ActiveStorage from "@rails/activestorage"
 ActiveStorage.start()
 
 import "@nathanvda/cocoon"
-
-//= require skim

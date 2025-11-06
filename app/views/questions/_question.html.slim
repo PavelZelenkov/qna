@@ -52,9 +52,9 @@ p= question.body
   
 -if user_signed_in?
   .div.question-vote
-    = link_to 'Like', '#', data: { type: 'json', id: question.id, type: 'question', value: 1 }, class: 'vote-btn'
+    = link_to 'Like', '#', data: { id: question.id, votable_type: 'question', value: 1, format: 'json' }, class: 'vote-btn'
     br
-    = link_to 'Dislike', '#', data: { type: 'json', id: question.id, type: 'question', value: -1 }, class: 'vote-btn'
+    = link_to 'Dislike', '#', data: { id: question.id, votable_type: 'question', value: -1, format: 'json' }, class: 'vote-btn'
 p id="rating_question_#{question.id}" = question.votes.sum(:value)
 
 h3 Comments

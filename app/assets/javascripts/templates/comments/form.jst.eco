@@ -1,0 +1,9 @@
+<form id="new-comment-<%= @commentable.id %>" class="new_comment_form" data-remote="true" method="post" action="/answers/<%= @commentable.id %>/comments">
+  <div class="field">
+    <textarea name="comment[body]" rows="3" placeholder="your comment"></textarea>
+  </div>
+  <div class="errors" style="display: none;"></div>
+  <div class="actions">
+    <input type="submit" value="Send" class="bnt">
+  </div>
+</form>

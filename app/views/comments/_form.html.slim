@@ -1,9 +1,7 @@
 - cid = "#{dom_id(commentable)}-comments"
 = form_with model: [commentable, Comment.new], 
-            data: { turbo: false, 
-                    comment_list: true, 
-                    create_url: polymorphic_path([commentable, :comments], format: :json), 
-                    list_id: cid }, 
+            data: { turbo: false }, 
+            local: false,
             html: { id: "new-comment-#{dom_id(commentable)}" } do |f|
   .field
     = f.text_area :body, rows: 3, placeholder: "your comment"

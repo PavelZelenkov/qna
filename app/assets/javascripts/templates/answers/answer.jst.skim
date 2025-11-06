@@ -1,0 +1,51 @@
+.answer id="answer-#{@answer.id}"
+  p = @answer.body
+
+  .links
+    - if @answer.links.length > 0
+      p Links:
+      ul
+        - for link in @answer.links
+          li id="link-#{link.id}"
+            a href=link.url target="_blank" = link.name
+            - if link.gist
+              iframe.gist-iframe src="#{link.url}.pibb" width="100%" height="#{link.gist_height}" frameborder="0"
+            br
+            - if @current_user_id? && @current_user_id == @answer.author_id
+              a.remove-link href="/links/#{link.id}" data-method="delete" data-remote="true" delete link
+
+  - if @answer.files.length > 0
+    - for file in @answer.files
+      div id="file-#{file.id}"
+        p
+          a href=file.url target="_blank" = file.name
+        - if @current_user_id? && @current_user_id == @answer.author_id
+          p
+            a href="/attachments/#{file.id}" data-method="delete" data-remote="true" delete file
+
+  - if @current_user_id? && @current_user_id == @answer.author_id
+    p
+      a.edit-answer-link href="#" data-answer-id=@answer.id Edit
+
+    p
+      a.delete-answer-link href="/answers/#{@answer.id}" data-answer-id=@answer.id data-method="delete" data-remote="true" Delete
+
+  - if @current_user_id && @current_user_id == @answer.question_author_id
+    p
+      a.mark-as-best href="/answers/#{@answer.id}/mark_as_best" data-method="patch" id=@answer.id
+        - if @answer.best
+          | best answer
+        - else
+          | choose the best answer
+        
+  - if @current_user_id? && @current_user_id != @answer.author_id
+    .div.answer-vote
+      a.vote-btn href="#" data-format="json" data-id=@answer.id data-value="1" data-votable-type="answer" Like
+      br
+      a.vote-btn href="#" data-format="json" data-id=@answer.id data-value="-1" data-votable-type="answer" Dislike
+
+  p id="rating_answer_#{@answer.id}" = @answer.rating
+
+  == @answer.comments_section_html
+  - if @current_user_id
+    == JST["templates/comments/form"]({commentable: @answer})
