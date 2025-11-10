@@ -1,5 +1,7 @@
 $("#link-<%= @link.id %>").remove();
 
-if ($(".links ul li").length === 0) {
-  $(".links p").remove();
-}
+$(`input[name*="[links_attributes]"][value="<%= @link.id %>"]`).each(function(){
+  const fields = this.closest(".nested-fields");
+  if (fields) fields.remove();
+});
+

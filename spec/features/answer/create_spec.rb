@@ -51,4 +51,29 @@ feature 'The user can write an answer to the question', %q{
     click_on 'Answer'
     expect(page).to have_content 'You need to sign in or sign up before continuing.'
   end
+
+  context "multiple sessions", js: true do
+    scenario "answer appears on another user's page" do
+      Capybara.using_session('user') do
+        sign_in(user)
+        visit questions_path
+        click_on 'MyString'
+
+        fill_in 'Body', with: 'text body answer'
+        click_on 'Answer'
+        
+        within '.answers' do
+          expect(page).to have_content 'text body answer'
+        end
+      end
+
+      Capybara.using_session('guest') do
+        visit questions_path
+        click_on 'MyString'
+        within '.answers' do
+          expect(page).to have_content 'text body answer'
+        end
+      end
+    end
+  end
 end

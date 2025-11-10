@@ -50,7 +50,12 @@
 
   -if current_user && !current_user.author_of?(answer)
     .div.answer-vote
-      = link_to 'Like', '#', data: { type: 'json', id: answer.id, type: 'answer', value: 1 }, class: 'vote-btn'
+      = link_to 'Like', '#', data: { id: answer.id, votable_type: 'answer', value: 1, format: 'json' }, class: 'vote-btn'
       br
-      = link_to 'Dislike', '#', data: { type: 'json', id: answer.id, type: 'answer', value: -1 }, class: 'vote-btn'
+      = link_to 'Dislike', '#', data: { id: answer.id, votable_type: 'answer', value: -1, format: 'json' }, class: 'vote-btn'
   p id="rating_answer_#{answer.id}"= answer.votes.sum(:value)
+
+  h3 Comments
+  = render "comments/list", comments: answer.comments.includes(:user).order(created_at: :asc), commentable: answer
+  -if user_signed_in?
+    = render "comments/form", commentable: answer
