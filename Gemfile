@@ -43,8 +43,12 @@ gem "skim"
 gem "gon"
 gem "eco"
 
-gem "omniauth"
+gem "omniauth", "~> 1.9"
 gem "omniauth-github"
+gem "omniauth-twitter", "~> 1.4"
+
+gem "letter_opener", group: :development
+gem "capybara-email", group: :test
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"

@@ -6,7 +6,7 @@ class User < ApplicationRecord
          :recoverable, 
          :rememberable,
          :validatable,
-         :omniauthable, omniauth_providers: %i[github]
+         :omniauthable, omniauth_providers: %i[github twitter]
 
   has_many :answers_created, class_name: 'Answer', foreign_key: :author_id
   has_many :questions_created, class_name: 'Question', foreign_key: :author_id
@@ -14,6 +14,7 @@ class User < ApplicationRecord
   has_many :comments
   has_many :votes, as: :votable, dependent: :destroy
   has_many :authorizations, dependent: :destroy
+  has_many :email_confirmations, dependent: :destroy
 
   def author_of?(model)
     model.author_id == id
@@ -24,6 +25,10 @@ class User < ApplicationRecord
   end
 
   def create_authorization(auth)
-    self.authorizations.create(provider: auth.provider, uid: auth.uid.to_s)
+    self.authorizations.create(provider: auth['provider'], uid: auth['uid'].to_s)
+  end
+
+  def confirmed?
+    self.confirmed
   end
 end

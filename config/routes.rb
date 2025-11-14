@@ -3,6 +3,9 @@ Rails.application.routes.draw do
   get "comments/create"
   devise_for :users, controllers: { omniauth_callbacks: 'oauth_callbacks' }
 
+  resources :email_confirmations, only: [:new, :create]
+  get '/email_confirmations/confirm/:token', to: 'email_confirmations#confirm', as: :confirm_email
+
   concern :commentable do
     resources :comments, only: [:index, :create]
   end

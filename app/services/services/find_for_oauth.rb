@@ -8,17 +8,20 @@ class Services::FindForOauth
   def call
     authorization = Authorization.where(provider: auth.provider, uid: auth.uid.to_s).first
     return authorization.user if authorization
-
+  
     email = auth.info[:email]
+    return nil if email.blank?
+  
     user = User.where(email: email).first
     if user
       user.create_authorization(auth)
-    else
-      password = Devise.friendly_token[0, 20]
-      user = User.create!(email: email, password: password, password_confirmation: password)
-      user.create_authorization(auth)
+      return user
     end
+  
+    password = Devise.friendly_token[0, 20]
+    user = User.create!(email: email, password: password, password_confirmation: password)
+    user.create_authorization(auth)
     user
   end
-end
 
+end
