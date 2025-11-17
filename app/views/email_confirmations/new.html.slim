@@ -1,0 +1,6 @@
+h2 Enter your Email to complete registration
+
+= form_with url: email_confirmations_path, method: :post, local: true do |f|
+  = f.label :email
+  = f.email_field :email
+  = f.submit 'Send'
