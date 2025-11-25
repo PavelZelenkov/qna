@@ -1,9 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe 'Answers Votes', type: :request do
-  let(:answer) { create(:answer, question_id: question.id, author_id: user.id) }
-  let(:question) { create(:question, author_id: user.id) }
+  let(:answer) { create(:answer, question_id: question.id, author_id: author.id) }
+  let(:question) { create(:question, author_id: author.id) }
   let(:user) { create(:user) }
+  let(:author) { create(:user) }
 
   describe 'POST /answer/:id/vote' do
     context 'registered user not author' do

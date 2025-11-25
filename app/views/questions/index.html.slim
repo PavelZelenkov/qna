@@ -1,4 +1,4 @@
--if user_signed_in?
+-if can?(:read, Award) && current_user
   p= link_to 'Awards', user_awards_path(current_user)
 
 p
@@ -6,4 +6,5 @@ ul.questions
   -@questions.each do |question|
     = render partial: 'questions/question_for_cable', locals: { question: question }
 
-p= link_to 'Ask question', new_question_path
+-if can?(:create, Question)
+  p= link_to 'Ask question', new_question_path

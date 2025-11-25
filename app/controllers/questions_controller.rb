@@ -5,6 +5,8 @@ class QuestionsController < ApplicationController
   before_action :load_question, only: %i[show edit update destroy]
   before_action :set_answer, only: %i[show]
 
+  skip_authorization_check only: [:vote]
+
   def index
     @questions = Question.all
   end
@@ -52,8 +54,8 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    if current_user.author_of?(@question)
-      @question.destroy
+    authorize! :destroy, @question
+    if @question.destroy
       redirect_to questions_path, notice: 'Your question has been successfully deleted'
     else
       redirect_to @question

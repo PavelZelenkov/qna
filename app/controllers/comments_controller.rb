@@ -1,6 +1,8 @@
 class CommentsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_commentable
+
+  authorize_resource
   
   def index
     @comments = @commentable.comments.includes(:user).order(created_at: :asc)

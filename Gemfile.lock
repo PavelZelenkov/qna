@@ -103,6 +103,7 @@ GEM
     brakeman (7.0.0)
       racc
     builder (3.3.0)
+    cancancan (3.6.1)
     capybara (3.40.0)
       addressable
       matrix
@@ -451,6 +452,7 @@ DEPENDENCIES
   aws-sdk-s3
   bootsnap
   brakeman
+  cancancan
   capybara
   capybara-email
   cocoon

@@ -1,4 +1,11 @@
 require 'rails_helper'
+require 'warden/test/helpers'
+
+RSpec.configure do |config|
+  config.include Warden::Test::Helpers
+  config.after(:each) { Warden.test_reset! }
+end
+
 
 feature 'User can create question', %q{
   "In order to get answer from a community
@@ -47,15 +54,14 @@ feature 'User can create question', %q{
 
   scenario 'Unauthenticated user tries to ask a question' do
     visit questions_path
-    click_on 'Ask question'
 
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    expect(page).not_to have_link("Ask question")
   end
 
   context "multiple sessions", js: true do
     scenario "question appears on another user's page" do
       Capybara.using_session('user') do
-        sign_in(user)
+        login_as(user, scope: :user)
         visit questions_path
 
         click_on 'Ask question'
