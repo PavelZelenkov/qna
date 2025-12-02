@@ -3,6 +3,9 @@ module Votable
 
   def vote
     votable = controller_name.classify.constantize.find(params[:id])
+
+    authorize! :like, votable
+    
     vote = votable.votes.find_by(user: current_user)
 
     if vote && vote.value == params[:value].to_i

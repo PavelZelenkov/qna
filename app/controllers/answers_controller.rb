@@ -5,6 +5,8 @@ class AnswersController < ApplicationController
   before_action :find_question, only: %i[create]
   before_action :load_answer, only: %i[update destroy mark_as_best]
   
+  skip_authorization_check only: [:vote]
+
   def create
     @answer = current_user.answers_created.new(answer_params)
     @answer.question_id = @question.id

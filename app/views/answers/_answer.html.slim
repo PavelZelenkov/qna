@@ -13,17 +13,17 @@
                 - height = 20 + 20 * gist_line_count(link.url)
                 iframe.gist-iframe src="#{link.url}.pibb" width="100%" height="#{height}" frameborder="0"
               br
-              -if user_signed_in? && current_user.author_of?(answer)
+              -if can?(:destroy, link)
                 = link_to "delete link", link_path(link), method: :delete, remote: true, class: "remove-link"
 
   -if answer.files.attached?
     - answer.files.each do |attachment|
       div id="file-#{attachment.id}"
         p= link_to attachment.filename.to_s, url_for(attachment), target: "_blank"
-        -if user_signed_in? && current_user.author_of?(answer)
+        -if can?(:destroy, attachment)
           p= link_to 'delete file', attachment_path(attachment), method: :delete, local: false, remote: true
 
-  -if current_user&.author_of?(answer)
+  -if can?(:update, answer)
     p= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
 
     = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" }, local: false do |f|
@@ -43,12 +43,13 @@
       p
       = f.submit 'Save'
 
+  -if can?(:destroy, answer)
     p= link_to 'Delete', answer_path(answer), class: 'delete-answer-link', data: { answer_id: answer.id, method: :delete }, local: false, remote: true
   
-  -if user_signed_in? && current_user.author_of?(answer.question)
+  -if can?(:mark_as_best, answer)
     p= link_to answer.best? ? 'best answer' : 'choose the best answer', mark_as_best_answer_path(answer), class: 'mark-as-best', data: { method: :patch }, id: answer.id, local: false, remote: true
 
-  -if current_user && !current_user.author_of?(answer)
+  -if can?(:like, answer)
     .div.answer-vote
       = link_to 'Like', '#', data: { id: answer.id, votable_type: 'answer', value: 1, format: 'json' }, class: 'vote-btn'
       br
@@ -57,5 +58,5 @@
 
   h3 Comments
   = render "comments/list", comments: answer.comments.includes(:user).order(created_at: :asc), commentable: answer
-  -if user_signed_in?
+  -if can?(:create, Comment)
     = render "comments/form", commentable: answer

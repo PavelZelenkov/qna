@@ -36,7 +36,7 @@ h3 New Answer
   = f.submit 'Answer'
 br
 
--if user_signed_in? && current_user.author_of?(@question)
+-if can?(:destroy, @question)
   = link_to 'delete question', question_path(@question), data: { turbo_method: :delete }
 br
 
