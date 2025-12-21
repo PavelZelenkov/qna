@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  use_doorkeeper
+  get '/oauth/callback', to: 'oauth#callback'
+
   get "comments/index"
   get "comments/create"
   devise_for :users, controllers: { omniauth_callbacks: 'oauth_callbacks' }
