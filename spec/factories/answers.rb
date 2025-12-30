@@ -7,6 +7,8 @@ FactoryBot.define do
     body
     question
 
+    association :author, factory: :user
+
     trait :invalid do
       body { nil }
     end
