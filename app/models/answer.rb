@@ -8,6 +8,8 @@ class Answer < ApplicationRecord
   accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true
 
   has_many_attached :files
+
+  after_commit :notify_about_new_answer, on: :create
   
   validates :body, presence: true
 
@@ -21,5 +23,11 @@ class Answer < ApplicationRecord
       update!(status: :best)
       question.award.update!(user: author) if question.award.present?
     end
+  end
+
+  private
+
+  def notify_about_new_answer
+    NewAnswerNotificationJob.perform_later(id)
   end
 end

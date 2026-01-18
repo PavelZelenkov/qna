@@ -15,6 +15,8 @@ class User < ApplicationRecord
   has_many :votes, as: :votable, dependent: :destroy
   has_many :authorizations, dependent: :destroy
   has_many :email_confirmations, dependent: :destroy
+  has_many :subscriptions, dependent: :destroy
+  has_many :subscribed_questions, through: :subscriptions, source: :question
 
   def author_of?(model)
     model.author_id == id

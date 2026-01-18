@@ -36,6 +36,13 @@ h3 New Answer
   = f.submit 'Answer'
 br
 
+-if user_signed_in?
+  -subscription = current_user.subscriptions.find_by(question: @question)
+  -if subscription && can?(:destroy, subscription)
+    =button_to "unsubscribe from updates", question_subscription_path(@question, subscription), method: :delete
+  -elsif can?(:create, Subscription)
+    =button_to "subscribe to updates", question_subscription_path(@question), method: :post
+
 -if can?(:destroy, @question)
   = link_to 'delete question', question_path(@question), data: { turbo_method: :delete }
 br

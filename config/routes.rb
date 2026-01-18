@@ -1,4 +1,10 @@
-Rails.application.routes.draw do
+require 'sidekiq/web'
+
+Rails.application.routes.draw do  
+  authenticate :user, lambda { |u| u.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
+
   use_doorkeeper
   get '/oauth/callback', to: 'oauth#callback'
 
@@ -35,6 +41,7 @@ Rails.application.routes.draw do
         post :vote
       end
     end
+    resource :subscription, only: %i[create destroy]
     concerns :commentable
   end
 
