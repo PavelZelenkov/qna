@@ -45,5 +45,8 @@ class Ability
     can :mark_as_best, Answer do |answer|
       answer.question.author == user
     end
+
+    can :create, Subscription
+    can :destroy, Subscription, user_id: user.id
   end
 end

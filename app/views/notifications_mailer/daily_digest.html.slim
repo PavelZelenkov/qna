@@ -1,0 +1,11 @@
+h1 Daily Question Digest
+
+- if @questions.any?
+  p Over the past 24 hours, the following questions have arisen:
+  ul
+    - @questions.each do |q|
+      li
+        = q.title
+        |  (created: #{q.created_at.strftime('%d.%m %H:%M')})
+- else
+  p There have been no new questions over the past 24 hours.

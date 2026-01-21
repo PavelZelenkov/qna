@@ -1,0 +1,14 @@
+h1 New answer to the question
+
+p
+  | Question:
+  strong = @question.title
+
+p
+  | New reply from user #{ @answer.author.email }:
+
+p = @answer.body
+
+p
+  | View question:
+  = link_to 'Open a question', question_url(@question)
