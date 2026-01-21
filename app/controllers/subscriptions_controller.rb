@@ -3,13 +3,12 @@ class SubscriptionsController < ApplicationController
   before_action :set_question
 
   def create
-    subscription = @question.subscriptions.find_or_initialize_by(user: current_user)
-    if subscription.persisted?
-      redirect_to @question, notice: 'You are already subscribed to this question'
-    elsif subscription.save
-      redirect_to @question, notice: 'You have been subscribed to this question'
+    @subscription = @question.subscriptions.build(user: current_user)
+    if @subscription.save
+      redirect_to @question, notice: "You have been subscribed to this question"
     else
-      redirect_to @question, alert: 'Failed to subscribe to this question'
+      # здесь как раз срабатывает валидация уникальности
+      redirect_to @question, alert: @subscription.errors.full_messages.to_sentence
     end
   end
 
