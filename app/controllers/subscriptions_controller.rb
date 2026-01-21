@@ -7,7 +7,6 @@ class SubscriptionsController < ApplicationController
     if @subscription.save
       redirect_to @question, notice: "You have been subscribed to this question"
     else
-      # здесь как раз срабатывает валидация уникальности
       redirect_to @question, alert: @subscription.errors.full_messages.to_sentence
     end
   end
