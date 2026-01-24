@@ -35,4 +35,26 @@ RSpec.describe User, type: :model do
       User.find_for_oauth(auth)
     end
   end
+
+  describe '.search_by_email' do
+    it 'finds by full email' do
+      needed = create(:user, email: 'testuser@gmail.com')
+      other = create(:user, email: 'someone@gmail.com')
+
+      results = User.search_by_email('testuser@gmail.com')
+
+      expect(results).to include(needed)
+      expect(results).not_to include(other)
+    end
+
+    it 'finds by email prefix' do
+      needed = create(:user, email: 'testuser@gmail.com')
+      other = create(:user, email: 'another@gmail.com')
+
+      results = User.search_by_email('testuser')
+
+      expect(results).to include(needed)
+      expect(results).not_to include(other)
+    end
+  end
 end

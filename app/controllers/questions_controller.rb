@@ -8,7 +8,11 @@ class QuestionsController < ApplicationController
   skip_authorization_check only: [:vote]
 
   def index
-    @questions = Question.all
+    if params[:query].present?
+      @questions = Question.search_by_title_and_body(params[:query])
+    else
+      @questions = Question.all
+    end
   end
 
   def show

@@ -1,4 +1,6 @@
 class Answer < ApplicationRecord
+  include PgSearch::Model
+  
   belongs_to :question
   belongs_to :author, class_name: 'User', foreign_key: :author_id
   has_many :links, dependent: :destroy, as: :linkable, inverse_of: :linkable
@@ -12,6 +14,8 @@ class Answer < ApplicationRecord
   after_commit :notify_about_new_answer, on: :create
   
   validates :body, presence: true
+
+  multisearchable against: [:body]
 
   enum status: { best: 1, regular: 0 }
 
