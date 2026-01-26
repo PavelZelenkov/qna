@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  include PgSearch::Model
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, 
@@ -17,6 +18,12 @@ class User < ApplicationRecord
   has_many :email_confirmations, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
   has_many :subscribed_questions, through: :subscriptions, source: :question
+
+  pg_search_scope :search_by_email,
+                  against: :email,
+                  using: {
+                    tsearch: { prefix: true }
+                  }
 
   def author_of?(model)
     model.author_id == id

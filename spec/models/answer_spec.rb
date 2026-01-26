@@ -15,20 +15,30 @@ RSpec.describe Answer, type: :model do
   let!(:answer2) { create(:answer, question: question, author: user, status: :best) }
 
   describe '#select_as_best' do
-   it 'makes the selected answer the best and the rest normal' do
-    answer1.select_as_best
+    it 'makes the selected answer the best and the rest normal' do
+      answer1.select_as_best
 
-    expect(answer1.reload.status).to eq 'best'
-    expect(answer2.reload.status).to eq 'regular'
-   end
+      expect(answer1.reload.status).to eq 'best'
+      expect(answer2.reload.status).to eq 'regular'
+    end
 
-   it 'does not change the status of the best answer in a group of other questions' do
-    other_question = create(:question, author: user)
-    other_answer = create(:answer, question: other_question, author: user, status: :best)
+    it 'does not change the status of the best answer in a group of other questions' do
+      other_question = create(:question, author: user)
+      other_answer = create(:answer, question: other_question, author: user, status: :best)
 
-    answer1.select_as_best
+      answer1.select_as_best
 
-    expect(other_answer.reload.status).to eq 'best'
-   end
+      expect(other_answer.reload.status).to eq 'best'
+    end
+  end
+
+  describe 'multisearchable' do
+    it 'indexes body to multisearch' do
+      answer = create(:answer, body: 'Answer test')
+      PgSearch::Multisearch.rebuild(Answer)
+
+      results = PgSearch.multisearch('Answer test')
+      expect(results.map(&:searchable)).to include(answer)
+    end
   end
 end

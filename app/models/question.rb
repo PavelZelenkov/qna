@@ -1,4 +1,6 @@
 class Question < ApplicationRecord
+  include PgSearch::Model
+
   has_many :answers, dependent: :destroy
   has_many :links, dependent: :destroy, as: :linkable, inverse_of: :linkable
   has_many :votes, as: :votable, dependent: :destroy
@@ -18,6 +20,14 @@ class Question < ApplicationRecord
 
   after_create :calculate_reputation
   after_create :subscribe_author
+
+  pg_search_scope :search_by_title_and_body,
+                  against: %i[title body],
+                  using: {
+                    tsearch: { prefix: true }
+                  }
+
+  multisearchable against: %i[title body]
 
   private
 

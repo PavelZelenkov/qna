@@ -1,0 +1,36 @@
+h1 Search
+
+= form_with url: searches_path, method: :get, local: true do |f|
+  .field
+    = f.label :query, 'What to look for?'
+    = f.text_field :query, value: params[:query]
+
+  .field
+    = f.label :scope, 'Where to look'
+    = f.select :scope, @scope_options, { selected: @scope }
+
+  .actions
+    = f.submit 'Search'
+
+- if @query.present?
+  h2 Results for "#{@query}"
+
+  - if @results.blank?
+    p Nothing found
+  - else
+    ul
+      - @results.each do |result|
+        - record = result.respond_to?(:searchable) ? result.searchable : result
+        li
+          - case record
+          - when Question
+            = link_to "Question: #{record.title}", record
+          - when Answer
+            = link_to "Answer to: #{record.question.title}", record.question
+          - when Comment
+            = "Comment: "
+            = truncate(record.body, length: 80)
+          - when User
+            = "User: #{record.email}"
+
+p= link_to 'Back', questions_path

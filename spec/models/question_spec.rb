@@ -22,4 +22,25 @@ RSpec.describe Question, type: :model do
       question.save!
     end
   end
+
+  describe 'pg_search' do
+    it 'indexes title and body for multisearch' do
+      PgSearch::Multisearch.rebuild(Question)
+
+      question = create(:question, title: 'Test question', body: 'Test body')
+      PgSearch::Multisearch.rebuild(Question)
+
+      results = PgSearch.multisearch('Test question')
+      expect(results.map(&:searchable)).to include(question)
+    end
+
+    it 'finds by pg_search_scope' do
+      needed  = create(:question, title: 'Ruby question', body: 'Why?')
+      _other  = create(:question, title: 'Other question', body: 'Something else')
+
+      results = Question.search_by_title_and_body('Ruby')
+      expect(results).to include(needed)
+      expect(results).not_to include(_other)
+    end
+  end
 end

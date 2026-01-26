@@ -1,6 +1,16 @@
 -if can?(:read, Award) && current_user
   p= link_to 'Awards', user_awards_path(current_user)
 
+= link_to 'Global search', searches_path
+p
+
+= form_with url: questions_path, method: :get, local: true do |f|
+  .field
+    = f.label :query, 'Search by questions'
+    = f.text_field :query, value: params[:query]
+  .actions
+    = f.submit 'Search'
+
 p
 ul.questions
   -@questions.each do |question|
