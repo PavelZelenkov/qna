@@ -13,6 +13,6 @@ pin "packs/utilities/questions"
 pin "packs/utilities/links"
 pin "packs/utilities/votes"
 pin "@rails/activestorage", to: "activestorage.esm.js"
-pin "@nathanvda/cocoon", to: "@nathanvda--cocoon.js" # @1.2.14
+pin "@nathanvda/cocoon", to: "https://cdn.jsdelivr.net/npm/@nathanvda/cocoon@1.2.14/cocoon.js"
 pin "@rails/actioncable", to: "actioncable.esm.js"
 pin_all_from "app/javascript/channels", under: "channels"
