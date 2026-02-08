@@ -29,3 +29,7 @@ set :puma_access_log, "#{shared_path}/log/puma.access.log"
 set :puma_error_log,  "#{shared_path}/log/puma.error.log"
 set :puma_preload_app, true
 set :puma_init_active_record, true
+
+set :whenever_roles,        -> { [:db] }     # или [:app]
+set :whenever_environment,  -> { fetch(:rails_env, "production") }
+set :whenever_identifier,   -> { "#{fetch(:application)}_#{fetch(:stage)}" }
