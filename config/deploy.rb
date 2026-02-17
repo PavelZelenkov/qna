@@ -36,7 +36,7 @@ set :unicorn_rack_env, -> { fetch(:rails_env, "production") }
 
 set :unicorn_pid,    -> { "#{shared_path}/tmp/pids/unicorn.pid" }
 
-set :whenever_command, "bundle exec whenever"
+set :whenever_command, -> { "~/.rvm/bin/rvm #{fetch(:rvm_ruby_version)} do bundle exec whenever" }
 set :whenever_roles,        -> { [:db] }
 set :whenever_environment,  -> { fetch(:rails_env, "production") }
 set :whenever_identifier,   -> { "#{fetch(:application)}_#{fetch(:stage)}" }
