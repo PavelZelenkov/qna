@@ -61,6 +61,7 @@ gem "sinatra", require: false
 
 gem "pg_search", "~> 2.3"
 
+gem "whenever", require: false
 gem "unicorn"
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
@@ -93,7 +94,6 @@ group :development do
   gem "capistrano-rvm", require: false
   gem "capistrano3-puma", require: false
   gem "capistrano-sidekiq", require: false
-  gem "whenever", require: false
   gem "capistrano3-unicorn", require: false
 end
 
