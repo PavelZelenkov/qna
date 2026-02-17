@@ -37,10 +37,10 @@ set :unicorn_rack_env, -> { fetch(:rails_env, "production") }
 set :unicorn_pid,    -> { "#{shared_path}/tmp/pids/unicorn.pid" }
 set :unicorn_config, -> { "#{shared_path}/config/unicorn.rb" }
 
-set :whenever_command, "bundle exec whenever"
-set :whenever_roles,        -> { [:db] }
-set :whenever_environment,  -> { fetch(:rails_env, "production") }
-set :whenever_identifier,   -> { "#{fetch(:application)}_#{fetch(:stage)}" }
+# set :whenever_command, "bundle exec whenever"
+# set :whenever_roles,        -> { [:db] }
+# set :whenever_environment,  -> { fetch(:rails_env, "production") }
+# set :whenever_identifier,   -> { "#{fetch(:application)}_#{fetch(:stage)}" }
 
 after 'deploy:publishing', 'unicorn:restart'
-after "deploy:publishing", "whenever:update_crontab"
+# after "deploy:publishing", "whenever:update_crontab"
