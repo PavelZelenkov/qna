@@ -58,9 +58,10 @@ gem "oj"
 
 gem "sidekiq"
 gem "sinatra", require: false
-gem "whenever", require: false
 
 gem "pg_search", "~> 2.3"
+
+gem "unicorn"
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
@@ -85,6 +86,15 @@ group :development do
 
   # Highlight the fine-grained location where an error occurred [https://github.com/ruby/error_highlight]
   gem "error_highlight", ">= 0.4.0", platforms: [ :ruby ]
+
+  gem "capistrano", "~> 3.18", require: false
+  gem "capistrano-rails", require: false
+  gem "capistrano-bundler", require: false
+  gem "capistrano-rvm", require: false
+  gem "capistrano3-puma", require: false
+  gem "capistrano-sidekiq", require: false
+  gem "whenever", require: false
+  gem "capistrano3-unicorn", require: false
 end
 
 group :test do
