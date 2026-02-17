@@ -9,7 +9,7 @@ set :deploy_to, "/home/deployer/qna"
 set :deploy_user, "deployer"
 
 # Default value for :linked_files is []
-append :linked_files, "config/database.yml", 'config/master.key', "config/unicorn/production.rb"
+append :linked_files, "config/database.yml", 'config/master.key'
 
 # Default value for linked_dirs is []
 append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system", "storage"
@@ -35,7 +35,6 @@ set :unicorn_env,  -> { fetch(:rails_env, "production") }
 set :unicorn_rack_env, -> { fetch(:rails_env, "production") }
 
 set :unicorn_pid,    -> { "#{shared_path}/tmp/pids/unicorn.pid" }
-set :unicorn_config, -> { "#{shared_path}/config/unicorn.rb" }
 
 set :whenever_command, "bundle exec whenever"
 set :whenever_roles,        -> { [:db] }
@@ -43,4 +42,3 @@ set :whenever_environment,  -> { fetch(:rails_env, "production") }
 set :whenever_identifier,   -> { "#{fetch(:application)}_#{fetch(:stage)}" }
 
 after 'deploy:publishing', 'unicorn:restart'
-after "deploy:publishing", "whenever:update_crontab"
