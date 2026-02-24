@@ -93,7 +93,7 @@ group :development do
   gem "capistrano-bundler", require: false
   gem "capistrano-rvm", require: false
   gem "capistrano3-puma", require: false
-  gem "capistrano-sidekiq", require: false
+  gem "capistrano-sidekiq", "~> 2.0", require: false
   gem "capistrano3-unicorn", require: false
 end
 

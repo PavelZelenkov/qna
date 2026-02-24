@@ -43,4 +43,11 @@ set :whenever_roles, -> { [:db] }
 set :whenever_environment, -> { fetch(:rails_env, "production") }
 set :whenever_identifier, -> { "#{fetch(:application)}_#{fetch(:stage)}" }
 
+set :sidekiq_config, -> { File.join(current_path, 'config', 'sidekiq.yml') }
+set :sidekiq_pid, -> { File.join(shared_path, 'tmp', 'pids', 'sidekiq.pid') }
+set :sidekiq_processes, 1
+set :sidekiq_concurrency, 5
+set :sidekiq_queues, %w[default mailers]
+set :sidekiq_role, :app
+
 after 'deploy:publishing', 'unicorn:restart'
