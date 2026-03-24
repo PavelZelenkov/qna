@@ -1,0 +1,5 @@
+h3 Comments
+= render "comments/list", comments: answer.comments.includes(:user).order(created_at: :asc), commentable: answer
+-if can?(:create, Comment)
+  = render "comments/form", commentable: answer
+  

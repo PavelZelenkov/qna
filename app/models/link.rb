@@ -1,5 +1,5 @@
 class Link < ApplicationRecord
-  belongs_to :linkable, polymorphic: true
+  belongs_to :linkable, polymorphic: true, touch: true
 
   validates :name, presence: true
   validates :url, presence: true, format: { with: /\A(http|https):\/\/[\w\-]+(\.[\w\-]+)+([\/\w\-.?=&%]*)?\z/i, 

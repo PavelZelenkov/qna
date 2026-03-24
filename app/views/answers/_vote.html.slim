@@ -1,0 +1,6 @@
+-if can?(:like, answer)
+  .div.answer-vote
+    = link_to 'Like', '#', data: { id: answer.id, votable_type: 'answer', value: 1, format: 'json' }, class: 'vote-btn'
+    br
+    = link_to 'Dislike', '#', data: { id: answer.id, votable_type: 'answer', value: -1, format: 'json' }, class: 'vote-btn'
+p id="rating_answer_#{answer.id}"= answer.votes.sum(:value)

@@ -1,7 +1,7 @@
 class Answer < ApplicationRecord
   include PgSearch::Model
   
-  belongs_to :question
+  belongs_to :question, touch: true
   belongs_to :author, class_name: 'User', foreign_key: :author_id
   has_many :links, dependent: :destroy, as: :linkable, inverse_of: :linkable
   has_many :votes, as: :votable, dependent: :destroy

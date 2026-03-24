@@ -1,5 +1,5 @@
 .answer id="answer-#{answer.id}"
-  -if Answer.exists?(answer.id)
+  - cache answer do
     p= answer.body
 
     .links
@@ -16,47 +16,38 @@
               -if can?(:destroy, link)
                 = link_to "delete link", link_path(link), method: :delete, remote: true, class: "remove-link"
 
-  -if answer.files.attached?
-    - answer.files.each do |attachment|
-      div id="file-#{attachment.id}"
-        p= link_to attachment.filename.to_s, url_for(attachment), target: "_blank"
-        -if can?(:destroy, attachment)
-          p= link_to 'delete file', attachment_path(attachment), method: :delete, local: false, remote: true
+      -if answer.files.attached?
+        - answer.files.each do |attachment|
+          div id="file-#{attachment.id}"
+            p= link_to attachment.filename.to_s, url_for(attachment), target: "_blank"
+            -if can?(:destroy, attachment)
+              p= link_to 'delete file', attachment_path(attachment), method: :delete, local: false, remote: true
 
-  -if can?(:update, answer)
-    p= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+      -if can?(:update, answer)
+        p= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
 
-    = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" }, local: false do |f|
-      = f.label :body, 'Your answer'
-      p
-      = f.text_area :body
-      p
-      = f.label :files
-      br
-      = f.file_field :files,  multiple: true, direct_upload: true
-      p Links:
-      #links
-        = f.fields_for :links do |l|
-          = render 'shared/link_fields', f: l
-        .links
-          = link_to_add_association 'add link', f, :links, partial: 'shared/link_fields'
-      p
-      = f.submit 'Save'
+        = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" }, local: false do |f|
+          = f.label :body, 'Your answer'
+          p
+          = f.text_area :body
+          p
+          = f.label :files
+          br
+          = f.file_field :files,  multiple: true, direct_upload: true
+          p Links:
+          #links
+            = f.fields_for :links do |l|
+              = render 'shared/link_fields', f: l
+            .links
+              = link_to_add_association 'add link', f, :links, partial: 'shared/link_fields'
+          p
+          = f.submit 'Save'
 
-  -if can?(:destroy, answer)
-    p= link_to 'Delete', answer_path(answer), class: 'delete-answer-link', data: { answer_id: answer.id, method: :delete }, local: false, remote: true
-  
-  -if can?(:mark_as_best, answer)
-    p= link_to answer.best? ? 'best answer' : 'choose the best answer', mark_as_best_answer_path(answer), class: 'mark-as-best', data: { method: :patch }, id: answer.id, local: false, remote: true
+      -if can?(:destroy, answer)
+        p= link_to 'Delete', answer_path(answer), class: 'delete-answer-link', data: { answer_id: answer.id, method: :delete }, local: false, remote: true
+      
+      -if can?(:mark_as_best, answer)
+        p= link_to answer.best? ? 'best answer' : 'choose the best answer', mark_as_best_answer_path(answer), class: 'mark-as-best', data: { method: :patch }, id: answer.id, local: false, remote: true
 
-  -if can?(:like, answer)
-    .div.answer-vote
-      = link_to 'Like', '#', data: { id: answer.id, votable_type: 'answer', value: 1, format: 'json' }, class: 'vote-btn'
-      br
-      = link_to 'Dislike', '#', data: { id: answer.id, votable_type: 'answer', value: -1, format: 'json' }, class: 'vote-btn'
-  p id="rating_answer_#{answer.id}"= answer.votes.sum(:value)
-
-  h3 Comments
-  = render "comments/list", comments: answer.comments.includes(:user).order(created_at: :asc), commentable: answer
-  -if can?(:create, Comment)
-    = render "comments/form", commentable: answer
+  = render 'answers/vote', answer: answer
+  = render 'answers/comments_section', answer: answer
