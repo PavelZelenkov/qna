@@ -1,5 +1,6 @@
 .questions
-  = render @question
+  - cache @question do
+    = render @question
 
 -if @question.award.present?
   p Best Answer Reward:
@@ -11,7 +12,9 @@
 
 .answers
   .answers-container
-    = render @question.answers.sorted
+    = render partial: 'answers/answer', 
+             collection: @question.answers.sorted, 
+             cached: true
 
 br
 
